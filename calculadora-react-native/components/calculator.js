@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
 
 const Calculator = () => {
   const [firstValue, setFirstValue] = useState("");
@@ -36,13 +36,11 @@ const Calculator = () => {
   };
 
   const handleChange1 = (text) => {
-    // Remove qualquer caractere que não seja número
     const numericValue = text.replace(/[^0-9]/g, "");
     setFirstValue(numericValue);
   };
 
   const handleChange2 = (text) => {
-    // Remove qualquer caractere que não seja número
     const numericValue = text.replace(/[^0-9]/g, "");
     setSecondValue(numericValue);
   };
@@ -56,7 +54,7 @@ const Calculator = () => {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.titleText}>Caclculadora</Text>
+        <Text style={styles.titleText}>Calculadora</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -65,48 +63,38 @@ const Calculator = () => {
           placeholder="Primeiro número"
           keyboardType="numeric"
           value={firstValue}
-          onChangeText={setFirstValue}
+          onChangeText={handleChange1} // Use o manipulador de texto correto
         />
         <TextInput
           style={styles.input}
           placeholder="Segundo número"
           keyboardType="numeric"
           value={secondValue}
-          onChangeText={setSecondValue}
+          onChangeText={handleChange2} // Use o manipulador de texto correto
         />
       </View>
 
       <Text style={styles.result}>{result}</Text>
 
       <View style={styles.buttonContainer}>
-        <Button
-          title="+"
-          onPress={() => calculate("+")}
-          style={styles.button}
-        />
-        <Button
-          title="-"
-          onPress={() => calculate("-")}
-          style={styles.button}
-        />
-        <Button
-          title="*"
-          onPress={() => calculate("*")}
-          style={styles.button}
-        />
-        <Button
-          title="/"
-          onPress={() => calculate("/")}
-          style={styles.button}
-        />
+        {["+", "-", "*", "/"].map((operation) => (
+          <TouchableOpacity
+            key={operation}
+            style={styles.button}
+            onPress={() => calculate(operation)}
+          >
+            <Text style={styles.buttonText}>{operation}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
+
       <View style={styles.clearButton}>
-        <Button
-          title="Limpar"
-          color="#FF0000"
-          style={styles.clearButton}
+        <TouchableOpacity
+          style={styles.clearButtonStyle}
           onPress={clear}
-        />
+        >
+          <Text style={styles.clearButtonText}>Limpar</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -124,8 +112,8 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 20,
-    width: "40%",
-    padding: 10,
+    width: "30%",
+    margin: '5%'
   },
   result: {
     fontSize: 30,
@@ -137,10 +125,31 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    width: 80
+    backgroundColor: "blue", // Cor de fundo azul
+    padding: 15,
+    borderRadius: 5,
+    width: 80,
+    alignItems: "center",
+    margin: 5,
+  },
+  buttonText: {
+    color: "white", // Cor do texto
+    fontSize: 24, // Tamanho do texto
+    fontWeight: "bold", // Texto em negrito
   },
   clearButton: {
     marginTop: 50,
+  },
+  clearButtonStyle: {
+    backgroundColor: "#FF0000", // Cor de fundo vermelho
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  clearButtonText: {
+    color: "white", // Cor do texto do botão limpar
+    fontSize: 24, // Tamanho do texto
+    fontWeight: "bold", // Texto em negrito
   },
   title: {
     marginBottom: 50,
@@ -149,9 +158,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 40,
   },
-  inputContainer:{
+  inputContainer: {
     flexDirection: "row",
-    justifyContent: "space-around"
+    justifyContent: "space-between"
   }
 });
 
